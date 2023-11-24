@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MorseCraft": {
+      "commandName": "Project",
+      "commandLineArgs": "-b \"Hallo Welt\""
+    }
+  }
+}
