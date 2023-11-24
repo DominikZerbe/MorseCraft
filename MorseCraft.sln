@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorseCraft", "MorseCraft\MorseCraft.csproj", "{DE6F739B-C35C-4009-834A-E30C30325F72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE6F739B-C35C-4009-834A-E30C30325F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE6F739B-C35C-4009-834A-E30C30325F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE6F739B-C35C-4009-834A-E30C30325F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE6F739B-C35C-4009-834A-E30C30325F72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A82DA97E-E320-4628-995B-1B5FACF39D2D}
+	EndGlobalSection
+EndGlobal
