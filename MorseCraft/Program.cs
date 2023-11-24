@@ -48,12 +48,7 @@ namespace MorseCraft
                 foreach (char c in code.Code)
                 {
 
-                    if (withTextoutput == true)
-                    {
-                        Console.Write(c);
-
-                    }
-
+                    if (withTextoutput == true) { Console.Write(c); }
 
                     switch (c.ToString())
                     {
@@ -90,10 +85,7 @@ namespace MorseCraft
                     ditCounter = 0;
                 }
 
-                if (withTextoutput == true)
-                {
-                    Console.Write(" ");
-                }
+                if (withTextoutput == true){ Console.Write(" "); }
 
             }
         }
