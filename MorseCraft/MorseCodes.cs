@@ -82,6 +82,7 @@ namespace MorseCraft
             knownCodes.Add(B);
             knownCodes.Add(C);
             knownCodes.Add(D);
+            knownCodes.Add(E);
 
             // Zahlen
             MorseCodes Eins = new MorseCodes("1", ".----");
