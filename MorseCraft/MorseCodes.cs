@@ -125,8 +125,8 @@ namespace MorseCraft
     public class MorseCodes
     {
 
-        private string _letter;
-        private string _code;
+        private string _letter =string.Empty;
+        private string _code=string.Empty;
 
         public string Letter
         {
@@ -141,7 +141,7 @@ namespace MorseCraft
         }
 
 
-        public MorseCodes(string letter, string code)
+        public  MorseCodes(string letter, string code)
         {
             this.Letter = letter;
             this.Code = code;

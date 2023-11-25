@@ -2,7 +2,7 @@
   "profiles": {
     "MorseCraft": {
       "commandName": "Project",
-      "commandLineArgs": "-b \"Hallo Welt\""
+      "commandLineArgs": "-t -s -b -file \"D:\\domin\\OneDrive\\Desktop\\test.txt\" -dit 100"
     }
   }
 }
