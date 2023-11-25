@@ -2,7 +2,7 @@
   "profiles": {
     "MorseCraft": {
       "commandName": "Project",
-      "commandLineArgs": "-t -s -b -file \"D:\\domin\\OneDrive\\Desktop\\test.txt\" -dit 100"
+      "commandLineArgs": "-m -s -b -file \"D:\\domin\\OneDrive\\Desktop\\test.txt\" -dit 100"
     }
   }
 }

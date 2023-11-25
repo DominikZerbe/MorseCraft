@@ -12,7 +12,6 @@ namespace MorseCraft
     {
         static void Main(string[] args)
         {
-
             CodeList.Initialize();
 
             // Soll eine Textdatei aus dem Dateisystem geladen werden?
@@ -29,7 +28,7 @@ namespace MorseCraft
             bool textToMorse=false;
 
             // Die Ditlänge in Milisekunden
-            int ditLength = 280;
+            int ditLength = 100;
 
             List<MorseCodes> codes = new List<MorseCodes> ();
 
@@ -45,61 +44,39 @@ namespace MorseCraft
                 filePath = args[indexFileParameter];
                 if(System.IO.File.Exists(filePath))
                 {
-                    fileContent = System.IO.File.ReadAllText(filePath);
-                   codes = MorseCodes.AnalyseText(fileContent);
-
+                   fileContent = System.IO.File.ReadAllText(filePath);
+                   codes = TextToMorse(fileContent);
                 }
                 else{Console.WriteLine($"The file doesnt exists: {filePath}");}
             }
-            else { }
 
-            int indexTextParameter = Array.IndexOf(args, "-s");
-            if(indexTextParameter!=-1) { 
-            showCodeAsText = true;
-            }
-
-            int indexMakeBeep = Array.IndexOf(args, "-b");
-            if (indexMakeBeep != -1)
-            {
-                makeBeepSound = true;
-            }
-
-            int indexConvertMode = Array.IndexOf(args, "-m");
-            if (indexConvertMode != -1)
-            {
-                textToMorse = true;
-            }
-
-            if (Array.IndexOf(args, "-t") != -1)
-            {
-                morseToText = true;
-            }
+            if (Array.IndexOf(args, "-s") != -1){showCodeAsText = true;}
+            if (Array.IndexOf(args, "-b") != -1){makeBeepSound = true;}
+            if (Array.IndexOf(args, "-m") != -1){textToMorse = true;}
+            if (Array.IndexOf(args, "-t") != -1){morseToText = true;}
 
             int indexDitParameter = Array.IndexOf(args, "-dit");
             if(indexDitParameter != -1)
             {
               indexDitParameter++;
-              ditLength =  int.Parse(args[indexDitParameter]);                    
+                try { 
+                    ditLength = int.Parse(args[indexDitParameter]);
+                    if (ditLength < 0) { ditLength = 100; }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return;
+                }
             }
 
-
-
-
-            if (textToMorse)
-            {
-                 ExecuteMorseCode(codes, showCodeAsText, makeBeepSound, false, ditLength);
-            }
+            if (textToMorse){ShowMorseCode(codes, showCodeAsText, makeBeepSound, false, ditLength);}
 
             if (morseToText)
             {
                 string klartext = MorseToText(fileContent);
                 Console.Write(klartext);    
-
             }
-
-
-
-
         }
 
         public static string MorseToText(string codeText)
@@ -127,32 +104,33 @@ namespace MorseCraft
             return klartextBuilder.ToString();
         }
 
-        public static async Task ExecuteMorseCode(List<MorseCodes> codeList,bool withTextoutput, bool withSound, bool withGraphics, int dithLength)
+        public static async Task ShowMorseCode(List<MorseCodes> codeList,bool printTextOnConsole, bool playSound, bool withGraphics, int ditLength)
         {
 
-            int ditLength = dithLength;
-            int dahLength = 3 * dithLength;
-            int dohLength = 7* dithLength;
+            // Das sind die Geschwindigkeitseinheiten beim Morsen.
+            int dit = ditLength;
+            int dah = 3 * dit;
+            int doh = 7* dit;
 
             foreach (MorseCodes code in codeList)
             {
                 foreach (char c in code.Code)
                 {                
 
-                    if (withTextoutput == true) { Console.Write($"{c}"); }
+                    if (printTextOnConsole) { Console.Write($"{c}"); }
 
                     switch (c)
                     {
                         case '.':
-                            if (withSound){await PlayBeep(ditLength,800); }
-                            else{Thread.Sleep(ditLength);}
+                            if (playSound){await PlayBeep(dit,800); }
+                            else{Thread.Sleep(dit);}
                             break;
                         case '-':
-                            if (withSound){ await PlayBeep(dahLength, 800); }
-                            else{Thread.Sleep(dahLength);}
+                            if (playSound){ await PlayBeep(dah, 800); }
+                            else{Thread.Sleep(dah);}
                             break;
                         case '/':
-                            Thread.Sleep(dohLength);
+                            Thread.Sleep(doh);
                             break;
                         default:
                             break;
@@ -176,6 +154,26 @@ namespace MorseCraft
             }
 
         }
+        public static List<MorseCodes> TextToMorse(string plainText)
+        {
+
+            List<MorseCodes> textAsCodeList = new List<MorseCodes>();
+
+            foreach (char c in plainText.ToUpper())
+            {
+
+                // Suche das richtige Element aus der Übersetzungsliste
+                MorseCodes? code = CodeList.Codes.FirstOrDefault(item => item.Letter == c.ToString());
+                if (code != null)
+                {
+                    textAsCodeList.Add(code);
+                }
+
+            }
+
+            return textAsCodeList;
+        }
+
 
 
     }

@@ -152,28 +152,7 @@ namespace MorseCraft
         {
             return "";
         }
-
-        public static List<MorseCodes> AnalyseText(string text)
-        {
-
-            List<MorseCodes> analysierterText = new List<MorseCodes>();
-
-            foreach (char c in text)
-            {
-
-                string zeichen = c.ToString().ToUpper();
-                // Suche das richtige Element aus der Übersetzungsliste
-                MorseCodes code = CodeList.Codes.FirstOrDefault(item => item.Letter == zeichen);
-                if (code != null)
-                {
-                     analysierterText.Add(code);
-                }
-
-            }
-
-            ;
-            return analysierterText;
-        }
+               
 
     }
 }
