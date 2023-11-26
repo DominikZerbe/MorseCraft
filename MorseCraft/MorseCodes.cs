@@ -14,12 +14,7 @@ namespace MorseCraft
     public static class CodeList
     {
 
-        private static List<MorseCodes> _codes = new List<MorseCodes>();
-        public static List<MorseCodes> Codes
-        {
-            get { return _codes; }
-            set { _codes = value; }
-        }
+       
 
         public static void Initialize()
         {
@@ -113,7 +108,7 @@ namespace MorseCraft
 
             };
 
-            Codes = Uebersetzungstabelle;
+            Program.Codes = Uebersetzungstabelle;
 
 
         }
@@ -145,14 +140,7 @@ namespace MorseCraft
         {
             this.Letter = letter;
             this.Code = code;
-        }
-
-
-        public static string TranslateToText(string code)
-        {
-            return "";
-        }
-               
+        }                     
 
     }
 }

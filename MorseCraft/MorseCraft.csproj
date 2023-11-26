@@ -5,6 +5,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <StartupObject>MorseCraft.Program</StartupObject>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>MorseCraft</Title>
+    <Authors>Dominik Zerbe</Authors>
+    <Company />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
