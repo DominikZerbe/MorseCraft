@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MorseCraft</name>
+    </assembly>
+    <members>
+        <member name="T:MorseCraft.CodeList">
+            <summary>
+            Hier werden alle bekannten Morsecodes beim Programmstart reingeladen.
+            Alle Übersetzungen greifen hierauf zu.
+            </summary>
+        </member>
+        <member name="M:MorseCraft.Program.GetParameterIndex(System.Array,System.String)">
+            <summary>
+            Gibt den Index eines Strings aus einem Array zurück.
+            </summary>
+            <param name="array"></param>
+            <param name="value"></param>
+            <returns>Index des Parameters / -1 wenn der Index nicht existiert</returns>
+        </member>
+    </members>
+</doc>
