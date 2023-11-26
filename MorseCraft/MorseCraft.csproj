@@ -17,11 +17,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="bin\Release\net6.0\publish\MorseCraft.deps.json" />
+    <Content Include="bin\Release\net6.0\publish\MorseCraft.runtimeconfig.json" />
+    <Content Include="bin\Release\net6.0\publish\MorseCraft.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="bin\Release\net6.0\" />
+    <None Include="bin\Release\net6.0\publish\MorseCraft.dll" />
+    <None Include="bin\Release\net6.0\publish\MorseCraft.exe" />
+    <None Include="bin\Release\net6.0\publish\MorseCraft.pdb" />
+    <None Include="bin\Release\net6.0\publish\NAudio.Asio.dll" />
+    <None Include="bin\Release\net6.0\publish\NAudio.Core.dll" />
+    <None Include="bin\Release\net6.0\publish\NAudio.dll" />
+    <None Include="bin\Release\net6.0\publish\NAudio.Midi.dll" />
+    <None Include="bin\Release\net6.0\publish\NAudio.Wasapi.dll" />
+    <None Include="bin\Release\net6.0\publish\NAudio.WinMM.dll" />
   </ItemGroup>
 
 </Project>
