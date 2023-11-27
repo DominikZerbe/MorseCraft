@@ -7,18 +7,18 @@ using System.Text.RegularExpressions;
 
 namespace MorseCraft
 {
-    class Program        
+    class Program
     {
 
         public static readonly List<Morse> TranslationTable = CodeList.Initialize();
-        
+
         static void Main(string[] args)
         {
             // Loads the translation table
             CodeList.Initialize();
 
             /*
-                The command line parameters are defined here. The variables are usually named like 
+                The command line parameters are defined here. The variables are usually named like
                 the command line parameters themselves. It is best to refer to the operating instructions.
             */
             bool t = CmdParamExists(args, "-t");
@@ -55,30 +55,24 @@ namespace MorseCraft
                 v = false;
                 file = false;
                 text = false;
-                dit = false;    
+                dit = false;
                 dir = false;
                 version = false;
             }
-            
+
             // Verarbeitung der Komandozeilenparameter         
-            
+
             if (file)
             {
-                // Der Pfad zur Datei sollte direkt nach dem File Parameter folgen
-                int indexOfParam = GetParameterIndex(args, "-file");
-                // Der Pfad zur Datei
-                string filePath = string.Empty;
 
-                // Prüfen ob es überhaupt einen mitgelieferten Pfad gibt.
-                if (args.Length <= indexOfParam +1)
+                string filePath = GetSubCmdParam(args, "-file");
+                if (filePath == String.Empty)
                 {
                     Console.WriteLine("Please enter a valid file path.");
                     return;
                 }
 
-                filePath = args[indexOfParam + 1].Replace("\"", "");
-
-                if (System.IO.File.Exists(filePath)== false)
+                if (System.IO.File.Exists(filePath) == false)
                 {
                     Console.WriteLine("The file doesn't exists.");
                     return;
@@ -89,84 +83,74 @@ namespace MorseCraft
 
             if (save)
             {
-                // Der Pfad zur Datei sollte direkt nach dem File Parameter folgen
-                int indexOfParam = GetParameterIndex(args, "-save");
-
-                // Prüfen ob es überhaupt einen mitgelieferten Pfad gibt.
-                if (args.Length <= indexOfParam + 1)
+                saveFilePath = GetSubCmdParam(args, "-save");
+                if (saveFilePath == String.Empty)
                 {
                     Console.WriteLine("Please enter a valid file path.");
                     return;
                 }
 
-                saveFilePath = args[indexOfParam+1].Replace("\"", "");
-
                 if (System.IO.File.Exists(saveFilePath) && y == false)
                 {
                     Console.WriteLine("The file already exists.");
                     Console.Write("Should the file be overwritten? (y/N) ");
-                    string ?userInput = Console.ReadLine()?.ToLower();
-                    if ((userInput != "y" && userInput !="yes"))
+                    string? userInput = Console.ReadLine()?.ToLower();
+                    if ((userInput != "y" && userInput != "yes"))
                     {
                         Console.WriteLine("Process was aborted by user.");
                         return;
                     }
                 }
-
             }
 
-            if (text) 
+            if (text)
             {
 
-                // Der Pfad zur Datei sollte direkt nach dem File Parameter folgen
-                int indexOfParam = GetParameterIndex(args, "-text") + 1;
-                // Der Pfad zur Datei
-
-                if (args.Length < indexOfParam)
+                textOrMorsecode = GetSubCmdParam(args, "-text");
+                if (textOrMorsecode == String.Empty)
                 {
-                    Console.WriteLine("Please enter a valid string.");
+                    Console.WriteLine("You need to specify the text you want to translate.");
                     return;
                 }
 
-                textOrMorsecode = args[indexOfParam].Replace("\"", "");
-
             }
 
-            if(dit)
+            if (dit)
             {
-                // Der Pfad zur Datei sollte direkt nach dem File Parameter folgen
-                int indexOfParam = GetParameterIndex(args, "-dit");
 
-                if (args.Length <= indexOfParam+1) 
+                string ditLengthUnconverted = GetSubCmdParam(args, "-dit");
+                if (ditLengthUnconverted == String.Empty)
                 {
                     Console.WriteLine("Please enter a valid dit lenght.");
                     return;
                 }
 
-               string ditParam = args[indexOfParam +1];
-
-                if (Regex.IsMatch(ditParam, @"^\d+$")==false)
+                if (Regex.IsMatch(ditLengthUnconverted, @"^\d+$") == false)
                 {
-                    Console.WriteLine("Please enter a valid dit lenght.");
+                    Console.WriteLine("The lenght of a dit should be a number.");
                     return;
                 }
 
-                ditLength= int.Parse(ditParam);
+                ditLength = int.Parse(ditLengthUnconverted);
 
-                if (ditLength< 0)
+                if (ditLength < 0)
                 {
                     Console.WriteLine("The entered ditlength was resetted to 100.");
                     ditLength = 100;
                 }
 
-                if (ditLength== 0) {
+                if (ditLength == 0)
+                {
                     a = false;
                 }
 
             }
 
             // Die Ditlenght ist nur relevant, wenn es auch eine akustische ausgabe gibt
-            if (a == false) { ditLength = 0; }
+            if (a == false)
+            {
+                ditLength = 0;
+            }
 
             if (t && m)
             {
@@ -175,7 +159,7 @@ namespace MorseCraft
             }
 
             // Prüft ob die Mindestkonfiguration vorliegt um das Programm auszuführen
-            if (file==false && text == false && h == false && dir==false && version==false) 
+            if (file == false && text == false && h == false && dir == false && version == false)
             {
                 Console.WriteLine("You need to specify what text you want to translate");
                 return;
@@ -183,19 +167,18 @@ namespace MorseCraft
 
             if (m)
             {
-                List<Morse> convertedTextOrMorse = new List<Morse>();
-                convertedTextOrMorse = TextToMorse(textOrMorsecode);
-                ShowMorseCode(convertedTextOrMorse, v, a, ditLength,save,saveFilePath);
+                List<Morse> convertedTextOrMorse = TextToMorse(textOrMorsecode);
+                ShowMorseCode(convertedTextOrMorse, v, a, ditLength, save, saveFilePath);
                 return;
             }
 
-            if(t) 
+            if (t)
             {
                 MorseToText(textOrMorsecode, save, saveFilePath);
                 return;
             }
 
-            if(h)
+            if (h)
             {
                 Console.WriteLine("-m (-file or -text)         | Convert text to morse");
                 Console.WriteLine("-t (-file or -text)         | Convert morse to text");
@@ -205,27 +188,24 @@ namespace MorseCraft
                 Console.WriteLine("-v                          | Outputs the Morse code / text in the console");
                 Console.WriteLine("-dit                        | Sets the ditlength - default is 100");
                 Console.WriteLine("-save (filepath)            | Saves the output o a file");
-                Console.WriteLine("-y                          | does not ask whether an existing file should be overwritten");
-
-
+                Console.WriteLine(
+                    "-y                          | does not ask whether an existing file should be overwritten");
                 return;
             }
 
             if (dir)
             {
-                ShowCodeList(v, a,  save, saveFilePath,ditLength);
+                ShowCodeList(v, a, save, saveFilePath, ditLength);
                 return;
             }
 
 
-            if(version)
+            if (version)
             {
                 Console.WriteLine("MorseCraft by Dominik Zerbe");
-                Console.WriteLine($"Version: 1.0.0");
+                Console.WriteLine($"Version: 1.0.1");
                 return;
             }
-
-            
 
 
         }
@@ -236,9 +216,9 @@ namespace MorseCraft
         /// <param name="suppliedParams">The string[] that contains all command line parameters.</param>
         /// <param name="searchedParam">The cmd line param that what searched for</param>
         /// <returns>true if it Exists, false if it doesnt exists</returns>
-        private static bool CmdParamExists(string[] suppliedParams, string searchedParam )
+        private static bool CmdParamExists(string[] suppliedParams, string searchedParam)
         {
-            bool paramExists= false;
+            bool paramExists;
             if (Array.IndexOf(suppliedParams, searchedParam) == -1)
             {
                 paramExists = false;
@@ -251,7 +231,8 @@ namespace MorseCraft
             return paramExists;
         }
 
-        private static async void ShowCodeList(bool printText, bool playSound,bool saveToFile, string ?filePath, int ditLength) 
+        private static async void ShowCodeList(bool printText, bool playSound, bool saveToFile, string filePath,
+            int ditLength)
         {
 
 
@@ -262,18 +243,23 @@ namespace MorseCraft
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (Morse code in TranslationTable)
+            foreach (Morse morse in TranslationTable)
             {
 
+                if (morse.Visible == false)
+                {
+                    continue;
+                }
 
                 if (printText)
                 {
-                    Console.Write($"{code.Text}   -->   ");
+                    Console.Write($"{morse.Text}   -->   ");
                 }
-                stringBuilder.Append($"{code.Text}   -->   ");
+
+                stringBuilder.Append($"{morse.Text}   -->   ");
 
                 ;
-                foreach (char c in code.Code)
+                foreach (char c in morse.Code)
                 {
 
                     if (printText)
@@ -281,17 +267,32 @@ namespace MorseCraft
                         Console.Write(c);
                         stringBuilder.Append(c);
                     }
+
                     if (playSound)
                     {
                         switch (c)
                         {
                             case '.':
-                                if (playSound) { await PlayBeep(dit, 800); }
-                                else { Thread.Sleep(dit); }
+                                if (playSound)
+                                {
+                                    await PlayBeep(dit, 800);
+                                }
+                                else
+                                {
+                                    Thread.Sleep(dit);
+                                }
+
                                 break;
                             case '-':
-                                if (playSound) { await PlayBeep(dah, 800); }
-                                else { Thread.Sleep(dah); }
+                                if (playSound)
+                                {
+                                    await PlayBeep(dah, 800);
+                                }
+                                else
+                                {
+                                    Thread.Sleep(dah);
+                                }
+
                                 break;
                             case '/':
                                 Thread.Sleep(doh);
@@ -304,10 +305,18 @@ namespace MorseCraft
 
                 }
 
-                if (playSound) {Thread.Sleep(doh); }
-                if (printText) {Console.WriteLine();}
-                stringBuilder.AppendLine();
+                if (playSound)
+                {
+                    Thread.Sleep(doh);
                 }
+
+                if (printText)
+                {
+                    Console.WriteLine();
+                }
+
+                stringBuilder.AppendLine();
+            }
 
             if (saveToFile)
             {
@@ -326,21 +335,21 @@ namespace MorseCraft
         public static void MorseToText(string codeText, bool saveToFile, string filePath)
         {
 
-            StringBuilder klartextBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
 
             foreach (string code in codeText.Split(" "))
             {
 
-               if (string.IsNullOrEmpty(code) == false)
+                if (string.IsNullOrEmpty(code) == false)
                 {
-                    Morse ?morseCode = TranslationTable.FirstOrDefault(item => item.Code == code);
+                    Morse? morseCode = TranslationTable.FirstOrDefault(item => item.Code == code);
                     if (morseCode != null)
                     {
-                        klartextBuilder.Append(morseCode.Text);
+                        stringBuilder.Append(morseCode.Text);
                     }
                     else
                     {
-                        klartextBuilder.Append($"[unbekannter code ({code})]");
+                        stringBuilder.Append($"[unknown code ({code})]");
                     }
                 }
             }
@@ -349,43 +358,63 @@ namespace MorseCraft
             {
                 try
                 {
-                    System.IO.File.WriteAllText(filePath, klartextBuilder.ToString());
-                } catch (Exception e)
+                    System.IO.File.WriteAllText(filePath, stringBuilder.ToString());
+                }
+                catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);   
+                    Console.WriteLine(e.Message);
                 }
             }
 
-            Console.WriteLine(klartextBuilder.ToString());
+            Console.WriteLine(stringBuilder.ToString());
         }
 
-        public static async Task ShowMorseCode(List<Morse> codeList,bool printToConsole, bool playSound, int ditLength, bool saveToFile, string filePath)
+        public static async Task ShowMorseCode(List<Morse> codeList, bool printToConsole, bool playSound, int ditLength,
+            bool saveToFile, string filePath)
         {
 
             // Das sind die Geschwindigkeitseinheiten beim Morsen.
             int dit = ditLength;
             int dah = 3 * dit;
-            int doh = 7* dit;
+            int doh = 7 * dit;
 
-            StringBuilder stringBuilder = new StringBuilder();  
+            StringBuilder stringBuilder = new StringBuilder();
 
             foreach (Morse code in codeList)
             {
                 foreach (char c in code.Code)
-                {                
+                {
 
-                    if (printToConsole) { Console.Write($"{c}"); }
+                    if (printToConsole)
+                    {
+                        Console.Write($"{c}");
+                    }
+
                     stringBuilder.Append(c);
 
                     switch (c)
                     {
                         case '.':
-                            if (playSound){await PlayBeep(dit,800); }
-                            else{Thread.Sleep(dit);}
+                            if (playSound)
+                            {
+                                await PlayBeep(dit, 800);
+                            }
+                            else
+                            {
+                                Thread.Sleep(dit);
+                            }
+
                             break;
                         case '-':
-                            if (playSound){ await PlayBeep(dah, 800); }
-                            else{Thread.Sleep(dah);}
+                            if (playSound)
+                            {
+                                await PlayBeep(dah, 800);
+                            }
+                            else
+                            {
+                                Thread.Sleep(dah);
+                            }
+
                             break;
                         case '/':
                             Thread.Sleep(doh);
@@ -395,38 +424,37 @@ namespace MorseCraft
                     }
                 }
 
+                Thread.Sleep(dah);
                 Console.Write(" ");
                 stringBuilder.Append(" ");
             }
 
             if (saveToFile)
-            {
                 try
                 {
-                    System.IO.File.WriteAllText(filePath,stringBuilder.ToString());
-                }catch (Exception e)
+                    File.WriteAllText(filePath, stringBuilder.ToString());
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
-            }
-
         }
 
 
         private static async Task PlayBeep(int duration, int frequence)
-        {         
+        {
             using (var player = new WaveOutEvent())
             {
-                var sineWaveProvider = new SignalGenerator() { Frequency = frequence, Type = SignalGeneratorType.Sin};
+                var sineWaveProvider = new SignalGenerator() { Frequency = frequence, Type = SignalGeneratorType.Sin };
                 player.Init(sineWaveProvider);
                 player.Play();
 
-                // Verwende Task.Delay für die Wartezeit
-                Thread.Sleep(duration); 
+                Thread.Sleep(duration);
                 player.Stop();
             }
 
         }
+
         public static List<Morse> TextToMorse(string plainText)
         {
 
@@ -448,18 +476,22 @@ namespace MorseCraft
         }
 
         /// <summary>
-        /// Gibt den Index eines Strings aus einem Array zurück.
+        /// Gets the sub commandline parameter like a path or something.
+        /// example: -text "hello world" would return hello world.
         /// </summary>
-        /// <param name="array"></param>
-        /// <param name="value"></param>
-        /// <returns>Index des Parameters / -1 wenn der Index nicht existiert</returns>
-        private static int GetParameterIndex(Array array, string value) {
+        /// <param name="allParams">all command line parameters</param>
+        /// <param name="mainParam">the param where we would like to get the sub param</param>
+        /// <returns>the sub param or string.empty if it not exists</returns>
+        private static string GetSubCmdParam(string[] allParams, string mainParam)
+        {
+            int indexOfMainParam = Array.IndexOf(allParams, mainParam);
 
-            return  Array.IndexOf(array, value);
-       
+            if (allParams.Length <= indexOfMainParam + 1)
+            {
+                return string.Empty;
+            }
+            
+            return allParams[indexOfMainParam + 1].Replace("\"", String.Empty);
         }
-
-
-
     }
 }

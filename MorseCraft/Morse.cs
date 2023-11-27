@@ -13,12 +13,16 @@ namespace MorseCraft
     /// </summary>
     public static class CodeList
     {
+
+        /// <summary>
+        /// Initializes the translation list. This function is called once when the program is started
+        /// </summary>
+        /// <returns>The translation list of morse codes</returns>
         public static List<Morse> Initialize()
         {
 
             List<Morse> translationTable = new List<Morse>()
             {
-                // Lateinische Buchstaben
                 new Morse("A", ".-"),
                 new Morse("B", "-..."),
                 new Morse("C", "-.-."),
@@ -45,8 +49,6 @@ namespace MorseCraft
                 new Morse("X", "-..-"),
                 new Morse("Y", "-.--"),
                 new Morse("Z", "--.."),
-
-                // Zahlen
                 new Morse("1", ".----"),
                 new Morse("2", "..---"),
                 new Morse("3", "...--"),
@@ -57,8 +59,6 @@ namespace MorseCraft
                 new Morse("8", "---.."),
                 new Morse("9", "----."),
                 new Morse("0", "-----"),
-
-                // Umlaute + Diakritisches
                 new Morse("À", ".--.-"),
                 new Morse("Å", ".--.-"),
                 new Morse("Ä", ".-..-"),
@@ -67,10 +67,8 @@ namespace MorseCraft
                 new Morse("Ö", "---."),
                 new Morse("Ü", "..--"),
                 new Morse("ß", "...--.."),
-                new Morse("CH", "----"), // Muss in späteren Auswertungen besonders berücksichtigt werden!
+                new Morse("CH", "----"),
                 new Morse("Ñ", "--.--"),
-
-                // Zeichen
                 new Morse(".", ".-.-.-"),
                 new Morse(",", "--..--"),
                 new Morse(":", "---..."),
@@ -87,8 +85,6 @@ namespace MorseCraft
                 new Morse("/", "-..-."),
                 new Morse("@", ".--.-."),
                 new Morse("\"", ".-..-."),
-
-                // Signale
                 new Morse("[SOS]", "...---..."),
                 new Morse("[Spruchanfang]", "-.-.-"),
                 new Morse("[Pause]", "-...-"),
@@ -97,10 +93,8 @@ namespace MorseCraft
                 new Morse("[Verkehrsende]", "...-.-"),
                 new Morse("[CQD]", "-.-. --.- -.."),
                 new Morse("[EEEEEEEE]", "..... . . ."),
-
-                // Pause wird ebenfalls als Code verwendet
-                new Morse(" ", "/"),
-                new Morse("\n", "\n"),
+                new Morse(" ", "/",false),
+                new Morse("\n", "\n",false),
 
             };
 
@@ -109,16 +103,36 @@ namespace MorseCraft
         }
 
     }
-
+    /// <summary>
+    /// The class contains the Morse code in comparison with human-readable characters.
+    /// </summary>
     public class Morse
     {
+        /// <summary>
+        /// The human readable symbol text like "h" or "3"
+        /// </summary>
         public string Text { get; set; }
+        /// <summary>
+        /// The morse code of the symbol
+        /// </summary>
         public string Code { get; set; }
 
-        public  Morse(string text, string code)
+        /// <summary>
+        /// Determines whether the code is displayed in the "dir" function of the program.
+        /// </summary>
+        public bool Visible = true;
+
+        /// <summary>
+        /// Structure for the Morse class
+        /// </summary>
+        /// <param name="text">The human readable symbol text like "h" or "3"</param>
+        /// <param name="code">The morse code of the symbol</param>
+        /// <param name="visible">Should the code be visible with the dir function? default is true</param>
+        public Morse(string text, string code, bool visible = true)
         {
             Text = text;
             Code = code;
+            Visible = visible;
         }                     
 
     }
