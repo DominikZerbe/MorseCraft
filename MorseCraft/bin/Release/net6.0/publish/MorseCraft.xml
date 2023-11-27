@@ -10,13 +10,56 @@
             Alle Übersetzungen greifen hierauf zu.
             </summary>
         </member>
-        <member name="M:MorseCraft.Program.GetParameterIndex(System.Array,System.String)">
+        <member name="M:MorseCraft.CodeList.Initialize">
             <summary>
-            Gibt den Index eines Strings aus einem Array zurück.
+            Initializes the translation list. This function is called once when the program is started
             </summary>
-            <param name="array"></param>
-            <param name="value"></param>
-            <returns>Index des Parameters / -1 wenn der Index nicht existiert</returns>
+            <returns>The translation list of morse codes</returns>
+        </member>
+        <member name="T:MorseCraft.Morse">
+            <summary>
+            The class contains the Morse code in comparison with human-readable characters.
+            </summary>
+        </member>
+        <member name="P:MorseCraft.Morse.Text">
+            <summary>
+            The human readable symbol text like "h" or "3"
+            </summary>
+        </member>
+        <member name="P:MorseCraft.Morse.Code">
+            <summary>
+            The morse code of the symbol
+            </summary>
+        </member>
+        <member name="F:MorseCraft.Morse.Visible">
+            <summary>
+            Determines whether the code is displayed in the "dir" function of the program.
+            </summary>
+        </member>
+        <member name="M:MorseCraft.Morse.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Structure for the Morse class
+            </summary>
+            <param name="text">The human readable symbol text like "h" or "3"</param>
+            <param name="code">The morse code of the symbol</param>
+            <param name="visible">Should the code be visible with the dir function? default is true</param>
+        </member>
+        <member name="M:MorseCraft.Program.CmdParamExists(System.String[],System.String)">
+            <summary>
+            Evaluates whether a command line parameter exists
+            </summary>
+            <param name="suppliedParams">The string[] that contains all command line parameters.</param>
+            <param name="searchedParam">The cmd line param that what searched for</param>
+            <returns>true if it Exists, false if it doesnt exists</returns>
+        </member>
+        <member name="M:MorseCraft.Program.GetSubCmdParam(System.String[],System.String)">
+            <summary>
+            Gets the sub commandline parameter like a path or something.
+            example: -text "hello world" would return hello world.
+            </summary>
+            <param name="allParams">all command line parameters</param>
+            <param name="mainParam">the param where we would like to get the sub param</param>
+            <returns>the sub param or string.empty if it not exists</returns>
         </member>
     </members>
 </doc>
