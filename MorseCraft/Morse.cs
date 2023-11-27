@@ -61,7 +61,7 @@ namespace MorseCraft
                 new Morse("0", "-----"),
                 new Morse("À", ".--.-"),
                 new Morse("Å", ".--.-"),
-                new Morse("Ä", ".-..-"),
+                new Morse("Ä", ".-.-"),
                 new Morse("È", ".-..-"),
                 new Morse("É", "..-.."),
                 new Morse("Ö", "---."),
