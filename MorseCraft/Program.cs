@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace MorseCraft
 {
-    class Program
+    public class Program
     {
 
         public static readonly List<Morse> TranslationTable = CodeList.Initialize();
@@ -216,7 +216,7 @@ namespace MorseCraft
         /// <param name="suppliedParams">The string[] that contains all command line parameters.</param>
         /// <param name="searchedParam">The cmd line param that what searched for</param>
         /// <returns>true if it Exists, false if it doesnt exists</returns>
-        private static bool CmdParamExists(string[] suppliedParams, string searchedParam)
+        public static bool CmdParamExists(string[] suppliedParams, string searchedParam)
         {
             bool paramExists;
             if (Array.IndexOf(suppliedParams, searchedParam) == -1)
@@ -482,7 +482,7 @@ namespace MorseCraft
         /// <param name="allParams">all command line parameters</param>
         /// <param name="mainParam">the param where we would like to get the sub param</param>
         /// <returns>the sub param or string.empty if it not exists</returns>
-        private static string GetSubCmdParam(string[] allParams, string mainParam)
+        public static string GetSubCmdParam(string[] allParams, string mainParam)
         {
             int indexOfMainParam = Array.IndexOf(allParams, mainParam);
 
