@@ -188,8 +188,9 @@ namespace MorseCraft
                 Console.WriteLine("-v                          | Outputs the Morse code / text in the console");
                 Console.WriteLine("-dit                        | Sets the ditlength - default is 100");
                 Console.WriteLine("-save (filepath)            | Saves the output o a file");
-                Console.WriteLine(
-                    "-y                          | does not ask whether an existing file should be overwritten");
+                Console.WriteLine("-y                          | does not ask whether an existing file should be overwritten");
+                Console.WriteLine("-version                    | Shows the Version of this tool (and a wisdom)");
+
                 return;
             }
 
@@ -202,8 +203,30 @@ namespace MorseCraft
 
             if (version)
             {
+
+                string wisdom = "Please be kind to snails , they are helpers in the garden. Not pests.";
+                List<Morse> wisdomAsMorse = TextToMorse(wisdom);
+
+                Console.WriteLine("\n");
                 Console.WriteLine("MorseCraft by Dominik Zerbe");
-                Console.WriteLine($"Version: 1.0.1");
+                Console.WriteLine($"Version: 1.0.2");
+                Console.WriteLine("\n\n\n");
+                Console.WriteLine("                 §§§§§§§§          §§     §§");
+                Console.WriteLine("               §§        §§       §§§§   §§§§");
+                Console.WriteLine("              §§  §§§§§§§§  §§      §§     §§");
+                Console.WriteLine("            §§  §§      §§  §§      §§   §§");
+                Console.WriteLine("           §§  §§   §§§  §§  §§     §§§§§");
+                Console.WriteLine("           §§  §§  §  §  §§  §§      §§§§§");
+                Console.WriteLine("           §§  §§  §§   §§§  §§     §§§§§");
+                Console.WriteLine("           §§  §§   §§§§§§  §§     §§§§§§");
+                Console.WriteLine("            §§  §§         §§     §§§§§§");
+                Console.WriteLine("       §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§");
+                Console.WriteLine("   §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§");
+                Console.WriteLine("   §§§§§§§§§§§§§§§§§§§§§§§§§§§§§§");
+                Console.WriteLine();
+                Console.WriteLine(wisdom);
+                ShowMorseCode(wisdomAsMorse, true, false, 20, false);
+                Console.WriteLine("\n\n\n");
                 return;
             }
 
@@ -332,7 +355,7 @@ namespace MorseCraft
 
         }
 
-        public static void MorseToText(string codeText, bool saveToFile, string filePath)
+        public static void MorseToText(string codeText, bool saveToFile, string filePath="" )
         {
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -370,7 +393,7 @@ namespace MorseCraft
         }
 
         public static async Task ShowMorseCode(List<Morse> codeList, bool printToConsole, bool playSound, int ditLength,
-            bool saveToFile, string filePath)
+            bool saveToFile, string filePath ="")
         {
 
             // Das sind die Geschwindigkeitseinheiten beim Morsen.
