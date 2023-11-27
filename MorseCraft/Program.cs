@@ -2,146 +2,64 @@
 
 using NAudio.Wave.SampleProviders;
 using NAudio.Wave;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Security.Cryptography.X509Certificates;
 
 namespace MorseCraft
 {
     class Program        
     {
 
-        private static List<MorseCodes> _codes = new List<MorseCodes>();
-        public static List<MorseCodes> Codes
-        {
-            get { return _codes; }
-            set { _codes = value; }
-        }
-
+        public static readonly List<Morse> TranslationTable = CodeList.Initialize();
+        
         static void Main(string[] args)
         {
-
-            // Definition der Komandozeilenparameter 
-
-            // Lädt die Übersetzungstabelle
+            // Loads the translation table
             CodeList.Initialize();
 
-            // Komandozeilenparameter -> Morse zu Text
-            bool t = false;
-
-            // Komandozeilenparameter -> Text zu Morse
-            bool m = false;
-
-            // Komandozeilenparameter -> Morsecode akustisch ausgeben
-            bool a = false;
-
-            // Komandozeilenparameter -> Gibt den Morsecode in der Konsole aus
-            bool v = false;
-
-            // Komandozeilenparameter -> Der auszwertende Text / Morsecode soll aus einer Datei geladen werden
-            bool file = false;
-
-            // Komandozeilenparameter -> Der auszwertende Text / Morsecode soll aus der Kommandozeile übernommen werden
-            bool text = false;
-
-            // Komandozeilenparameter -> Die Standard Ditgeschwindigkeit wird vom Benutzer mitgeliefert
-            bool dit = false;
+            /*
+                The command line parameters are defined here. The variables are usually named like 
+                the command line parameters themselves. It is best to refer to the operating instructions.
+            */
+            bool t = CmdParamExists(args, "-t");
+            bool m = CmdParamExists(args, "-m");
+            bool a = CmdParamExists(args, "-a");
+            bool v = CmdParamExists(args, "-v");
+            bool file = CmdParamExists(args, "-file");
+            bool text = CmdParamExists(args, "-text");
+            bool dit = CmdParamExists(args, "-dit");
             int ditLength = 100;
-
-            // Komandozeilenparameter -> Gibt die Hilfe aus
-            bool h = false;            
-
-            // Komandozeilenparameter -> Gibt die Übersetzungstabelle aus
-            bool dir = false;                            
-
-            // Komandozeilenparameter -> Ob der Output in einer Datei gespeichert werden soll
-            bool save = false;
-            bool y = false;
+            bool h = CmdParamExists(args, "-h");
+            bool dir = CmdParamExists(args, "-dir");
+            bool save = CmdParamExists(args, "-save");
+            bool y = CmdParamExists(args, "-y");
             string saveFilePath = string.Empty;
+            bool version = CmdParamExists(args, "-version");
 
-            bool version = false;   
+
+            // The text or Morse code to be processed.
+            string textOrMorsecode = string.Empty;
 
             // Einlesen der Komandozeilenparameter
-
-            if (args.Length == 0 )
-            { 
-                h = true;
-            }
-
-            if (Array.IndexOf(args, "-t") != -1) {
-                t = true;
-            }
-
-            if (Array.IndexOf(args, "-m") != -1)
+            if (text && file)
             {
-                m = true;
+                Console.WriteLine("You can read in either a file or a string. But not both at the same time.");
+                return;
             }
 
-            if (Array.IndexOf(args, "-a") != -1)
+            if (h)
             {
-                a = true;
-            }
-
-            if (Array.IndexOf(args, "-v") != -1)
-            {
-                v = true;
-            }
-
-            if (Array.IndexOf(args, "-y") != -1)
-            {
-                y = true;
-            }
-
-            if (Array.IndexOf(args, "-file") != -1)
-            {
-                file = true;
-                text = false;
-            }
-
-            if (Array.IndexOf(args, "-text") != -1)
-            {
-                text = true;
-                file = false;
-            }
-
-            if (Array.IndexOf(args, "-dit") != -1)
-            {
-                dit = true;
-            }
-
-            if (Array.IndexOf(args, "-dir") != -1)
-            {
-                dir = true;
-            }
-
-            if (Array.IndexOf(args, "-save") != -1)
-            {
-                save = true;
-            }
-
-            if (Array.IndexOf(args, "-version") != -1)
-            {
-                version = true;
-            }
-
-            if (Array.IndexOf(args, "-h") != -1)
-            {
-                h = true;
                 t = false;
                 m = false;
                 a = false;
                 v = false;
                 file = false;
                 text = false;
-                dit = false;
+                dit = false;    
                 dir = false;
+                version = false;
             }
-
-            // Der Text / Morsecode der verarbeitet werden soll
-            string textOrMorsecode = string.Empty;
-
+            
             // Verarbeitung der Komandozeilenparameter         
             
             if (file)
@@ -187,7 +105,7 @@ namespace MorseCraft
                 {
                     Console.WriteLine("The file already exists.");
                     Console.Write("Should the file be overwritten? (y/N) ");
-                    string userInput = Console.ReadLine().ToLower();
+                    string ?userInput = Console.ReadLine()?.ToLower();
                     if ((userInput != "y" && userInput !="yes"))
                     {
                         Console.WriteLine("Process was aborted by user.");
@@ -265,7 +183,7 @@ namespace MorseCraft
 
             if (m)
             {
-                List<MorseCodes> convertedTextOrMorse = new List<MorseCodes>();
+                List<Morse> convertedTextOrMorse = new List<Morse>();
                 convertedTextOrMorse = TextToMorse(textOrMorsecode);
                 ShowMorseCode(convertedTextOrMorse, v, a, ditLength,save,saveFilePath);
                 return;
@@ -312,6 +230,26 @@ namespace MorseCraft
 
         }
 
+        /// <summary>
+        /// Evaluates whether a command line parameter exists
+        /// </summary>
+        /// <param name="suppliedParams">The string[] that contains all command line parameters.</param>
+        /// <param name="searchedParam">The cmd line param that what searched for</param>
+        /// <returns>true if it Exists, false if it doesnt exists</returns>
+        private static bool CmdParamExists(string[] suppliedParams, string searchedParam )
+        {
+            bool paramExists= false;
+            if (Array.IndexOf(suppliedParams, searchedParam) == -1)
+            {
+                paramExists = false;
+            }
+            else
+            {
+                paramExists = true;
+            }
+
+            return paramExists;
+        }
 
         private static async void ShowCodeList(bool printText, bool playSound,bool saveToFile, string ?filePath, int ditLength) 
         {
@@ -324,15 +262,15 @@ namespace MorseCraft
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (MorseCodes code in Codes)
+            foreach (Morse code in TranslationTable)
             {
 
 
                 if (printText)
                 {
-                    Console.Write($"{code.Letter}   -->   ");
+                    Console.Write($"{code.Text}   -->   ");
                 }
-                stringBuilder.Append($"{code.Letter}   -->   ");
+                stringBuilder.Append($"{code.Text}   -->   ");
 
                 ;
                 foreach (char c in code.Code)
@@ -395,10 +333,10 @@ namespace MorseCraft
 
                if (string.IsNullOrEmpty(code) == false)
                 {
-                    MorseCodes morseCode = Program.Codes.FirstOrDefault(item => item.Code == code);
+                    Morse ?morseCode = TranslationTable.FirstOrDefault(item => item.Code == code);
                     if (morseCode != null)
                     {
-                        klartextBuilder.Append(morseCode.Letter);
+                        klartextBuilder.Append(morseCode.Text);
                     }
                     else
                     {
@@ -421,7 +359,7 @@ namespace MorseCraft
             Console.WriteLine(klartextBuilder.ToString());
         }
 
-        public static async Task ShowMorseCode(List<MorseCodes> codeList,bool printToConsole, bool playSound, int ditLength, bool saveToFile, string filePath)
+        public static async Task ShowMorseCode(List<Morse> codeList,bool printToConsole, bool playSound, int ditLength, bool saveToFile, string filePath)
         {
 
             // Das sind die Geschwindigkeitseinheiten beim Morsen.
@@ -431,7 +369,7 @@ namespace MorseCraft
 
             StringBuilder stringBuilder = new StringBuilder();  
 
-            foreach (MorseCodes code in codeList)
+            foreach (Morse code in codeList)
             {
                 foreach (char c in code.Code)
                 {                
@@ -489,16 +427,16 @@ namespace MorseCraft
             }
 
         }
-        public static List<MorseCodes> TextToMorse(string plainText)
+        public static List<Morse> TextToMorse(string plainText)
         {
 
-            List<MorseCodes> textAsCodeList = new List<MorseCodes>();
+            List<Morse> textAsCodeList = new List<Morse>();
 
             foreach (char c in plainText.ToUpper())
             {
 
                 // Suche das richtige Element aus der Übersetzungsliste
-                MorseCodes? code = Program.Codes.FirstOrDefault(item => item.Letter == c.ToString());
+                Morse? code = Program.TranslationTable.FirstOrDefault(item => item.Text == c.ToString());
                 if (code != null)
                 {
                     textAsCodeList.Add(code);

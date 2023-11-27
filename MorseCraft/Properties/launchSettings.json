@@ -2,7 +2,7 @@
   "profiles": {
     "MorseCraft": {
       "commandName": "Project",
-      "commandLineArgs": "-t -m"
+      "commandLineArgs": "-m -text \"Hallo Welt\" -a -v"
     }
   }
 }
